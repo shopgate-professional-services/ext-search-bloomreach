@@ -1,0 +1,38 @@
+{
+  "version": "1",
+  "pipeline": {
+    "id": "shopgate.catalog.getSearchSuggestions.v1",
+    "input": [
+      {
+        "id": "1",
+        "key": "searchPhrase"
+      }
+    ],
+    "steps": [
+      {
+        "id": "@shopgate-project/search-bloomreach",
+        "path": "@shopgate-project/search-bloomreach/lib/getSearchSuggestions.js",
+        "type": "extension",
+        "input": [
+          {
+            "id": "1",
+            "key": "searchPhrase"
+          }
+        ],
+        "output": [
+          {
+            "id": "1000",
+            "key": "suggestions"
+          }
+        ]
+      }
+    ],
+    "output": [
+      {
+        "id": "1000",
+        "key": "suggestions"
+      }
+    ],
+    "public": true
+  }
+}

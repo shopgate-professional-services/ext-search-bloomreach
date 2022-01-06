@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0-beta.1",
+  "id": "@shopgate-project/search-bloomreach",
+  "components": [
+
+  ],
+  "configuration": {
+    "auth_key": {
+      "type": "admin",
+      "destination": "backend",
+      "default": "aw079licjpe5ojxz",
+      "params": {
+        "label": "Bloomreach API auth_key",
+        "type": "text"
+      }
+    },
+    "domain_key": {
+      "type": "admin",
+      "destination": "backend",
+      "default": "harborfreight_en_app",
+      "params": {
+        "label": "Bloomreach API domain_key",
+        "type": "text"
+      }
+    },
+    "account_id": {
+      "type": "admin",
+      "destination": "backend",
+      "default": "6209",
+      "params": {
+        "label": "Bloomreach account_id",
+        "type": "text"
+      }
+    },
+    "url": {
+      "type": "admin",
+      "destination": "backend",
+      "default": "https://www.example.com",
+      "params": {
+        "label": "The absolute URL of the page where the request is made.",
+        "type": "text"
+      }
+    },
+    "ref_url": {
+      "type": "admin",
+      "destination": "backend",
+      "default": "",
+      "params": {
+        "label": "The URL of the HTTP referrer for the webpage where the request is made. You must pass this parameter, but you can send it empty.",
+        "type": "text"
+      }
+    },
+    "filterMap": {
+      "type": "admin",
+      "destination": "backend",
+      "default": {
+        "brand": "Marke",
+        "categories": "Kategorie",
+        "price": "Preis",
+        "availability": "Verfügbarkeit"
+      },
+      "params": {
+        "label": "Doofinder Filter Map",
+        "type": "json"
+      }
+    },
+    "useSearchSuggestions": {
+      "type": "admin",
+      "destination": "backend",
+      "default": true,
+      "params": {
+        "label": "Flag if search suggestions should be used or not",
+        "type": "checkbox"
+      }
+    }
+  }
+}
