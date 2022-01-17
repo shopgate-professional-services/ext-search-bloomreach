@@ -80,7 +80,7 @@ class Client {
       )
     }
 
-    console.warn(JSON.stringify(response.body))
+    console.warn(JSON.stringify(response))
 
     return response.body
   }
@@ -91,11 +91,16 @@ class Client {
    * @returns {Object}
    */
   async getSearchSuggestions (q) {
-    const response = await this.request({ q: q.slice(0, 88), request_type: 'suggest' })
+
+    const response = await this.request({
+      q: q.slice(0, 88),
+      search_type: undefined,
+      request_type: 'suggest'
+    })
 
     return {
-      suggestions: response && response.results ? response.results.map(
-        result => result.term.charAt(0).toUpperCase() + result.term.slice(1)
+      suggestions: response && response.suggestions ? response.suggestions.map(
+        result => result.q
       ) : []
     }
   }

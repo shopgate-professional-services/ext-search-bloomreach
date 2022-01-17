@@ -1,4 +1,4 @@
-const DoofinderClient = require('./doofinder/Client')
+const BloomreachClient = require('./bloomreach/Client')
 
 /**
  * @param {PipelineContext} context
@@ -6,5 +6,5 @@ const DoofinderClient = require('./doofinder/Client')
  * @returns {Promise<Object>}
  */
 module.exports = async (context, input) => {
-  return new DoofinderClient(context).searchProducts(input)
+  return new BloomreachClient(context).searchProducts(input)
 }

@@ -1,4 +1,4 @@
-const DoofinderClient = require('./doofinder/Client')
+const BloomreachClient = require('./bloomreach/Client')
 
 /**
  * @param {PipelineContext} context
@@ -14,5 +14,5 @@ module.exports = async (context, input) => {
     }
   }
 
-  return new DoofinderClient(context).getSearchSuggestions(input.searchPhrase)
+  return new BloomreachClient(context, 'suggest').getSearchSuggestions(input.searchPhrase)
 }
