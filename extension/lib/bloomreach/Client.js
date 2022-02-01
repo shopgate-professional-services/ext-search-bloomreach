@@ -80,8 +80,6 @@ class Client {
       )
     }
 
-    console.warn(JSON.stringify(response))
-
     return response.body
   }
 
@@ -91,7 +89,6 @@ class Client {
    * @returns {Object}
    */
   async getSearchSuggestions (q) {
-
     const response = await this.request({
       q: q.slice(0, 88),
       search_type: undefined,
@@ -120,6 +117,7 @@ class Client {
       request_type: 'search',
       search_type: 'keyword'
     }
+
     const { response } = await this.request(params) || {}
 
     if (!response || !Array.isArray(response.docs)) {
@@ -265,8 +263,11 @@ class Client {
   prepareSort (sort) {
     // TODO: how to do "top rated" ?
     const mapping = {
+      nameDesc: 'name desc',
+      nameAsc: 'name asc',
       priceDesc: 'sale_price desc',
-      priceAsc: 'sale_price asc'
+      priceAsc: 'sale_price asc',
+      rankAsc: 'review_rating desc' // TODO:
     }
 
     return mapping[sort]

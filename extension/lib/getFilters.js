@@ -1,4 +1,4 @@
-const DoofinderClient = require('./bloomreach/Client')
+const BloomreachClient = require('./bloomreach/Client')
 
 /**
  * @param {PipelineContext} context
@@ -6,7 +6,7 @@ const DoofinderClient = require('./bloomreach/Client')
  * @returns {Promise<Object>}
  */
 module.exports = async (context, input) => {
-  const { filters } = await new DoofinderClient(context).getFilters(input.searchPhrase)
+  const { filters } = await new BloomreachClient(context).getFilters(input.searchPhrase)
 
   return { filters }
 }
