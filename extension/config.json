@@ -4,11 +4,5 @@
   "account_id": "6209",
   "url": "https://www.example.com",
   "ref_url": "",
-  "filterMap": {
-    "brand": "Marke",
-    "categories": "Kategorie",
-    "price": "Preis",
-    "availability": "Verfügbarkeit"
-  },
   "useSearchSuggestions": true
 }

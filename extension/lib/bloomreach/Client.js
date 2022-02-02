@@ -16,12 +16,6 @@ class Client {
     this.url = config.url
     this.ref_url = config.ref_url
 
-    this.filterMap = config.filterMap
-    this.filterMapFlipped = config.filterMap ? Object.keys(this.filterMap).reduce((acc, k) => {
-      acc[this.filterMap[k]] = k
-      return acc
-    }, {}) : {}
-
     this.tracedRequest = tracedRequest
     this.log = log
   }
@@ -67,6 +61,7 @@ class Client {
         search_type: 'keyword',
         ...params
       },
+      useQuerystring: true,
       json: true
     })
 
@@ -110,7 +105,7 @@ class Client {
     const params = {
       q: searchPhrase,
       // TODO:
-      // fq: this.prepareFilters(filters),
+      fq: this.prepareFilters(filters),
       start: offset,
       rows: limit,
       sort: this.prepareSort(sort),
@@ -240,19 +235,13 @@ class Client {
    * @return {Object}
    */
   prepareFilters (filters = {}) {
-    return Object.keys(filters).reduce((acc, filterKey) => {
-      if (filterKey === 'price') {
-        acc[filterKey] = {
-          gte: filters[filterKey].minimum / 100,
-          lt: filters[filterKey].maximum / 100
-        }
-      } else if (this.filterMapFlipped[filterKey]) {
-        acc[this.filterMapFlipped[filterKey]] = filters[filterKey].values
-      } else {
-        acc[filterKey] = filters[filterKey].values
-      }
-      return acc
-    }, {})
+    // const params = new URLSearchParams();
+    return Object.keys(filters).map((filter) => {
+      // &fq=color: "red" OR "purple"
+      const values = filters[filter].values.map((val) => `"${val}"`)
+      return `${filter}: ${values.join(' OR ')}`
+      // params.append('fq', `${id}: ${values.join(' OR ')}`);
+    })
   }
 
   /**
