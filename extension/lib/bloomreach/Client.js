@@ -208,7 +208,7 @@ class Client {
       )
     }
 
-    console.warn(facetFieldsToUse)
+    const regEx = new RegExp('\\+', 'g')
 
     const filters = facetFieldsToUse.map(({ id, name, facets }) => {
       return {
@@ -218,7 +218,7 @@ class Client {
         type: 'multiselect',
         values: facets.map(element => ({
           id: element.id || element.name,
-          label: `${decodeURIComponent(element.name.replaceAll('+', ' '))} (${element.count})`,
+          label: `${decodeURIComponent(element.name.replace(regEx, ' '))} (${element.count})`,
           hits: element.count
         }))
       }
