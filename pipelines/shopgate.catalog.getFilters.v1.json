@@ -43,9 +43,9 @@
             }
           ]
         },
-        "then": {
-          "id": "@shopgate/products",
-          "path": "@shopgate/products/products/getFilters.js",
+      "then": {
+        "id": "@shopgate/catalog",
+        "path": "@shopgate/catalog/filters/getFilters.js",
           "type": "extension",
           "input": [
             {
