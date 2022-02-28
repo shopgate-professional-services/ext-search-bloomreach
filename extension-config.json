@@ -2,7 +2,11 @@
   "version": "1.0.0-beta.5",
   "id": "@shopgate-project/search-bloomreach",
   "components": [
-
+    {
+      "id": "Subscribers",
+      "path": "frontend/subscriptions.js",
+      "type": "subscribers"
+    }
   ],
   "configuration": {
     "auth_key": {

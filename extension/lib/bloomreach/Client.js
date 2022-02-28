@@ -113,7 +113,7 @@ class Client {
       search_type: 'keyword'
     }
 
-    const { response } = await this.request(params) || {}
+    const { response, keywordRedirect = {} } = await this.request(params) || {}
 
     if (!response || !Array.isArray(response.docs)) {
       this.log.error(
@@ -131,7 +131,8 @@ class Client {
 
     return {
       productIds: response.docs.map(({ ProductCode }) => ProductCode.toString()),
-      totalProductCount: response.numFound
+      totalProductCount: response.numFound,
+      redirectedUrl: keywordRedirect['redirected url'] || null
     }
   }
 
