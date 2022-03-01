@@ -156,6 +156,10 @@
           {
             "id": "1000",
             "key": "totalProductCount"
+          },
+          {
+            "id": "1001",
+            "key": "redirectedUrl"
           }
         ]
       },
@@ -215,6 +219,10 @@
       {
         "id": "100",
         "key": "products"
+      },
+      {
+        "id": "1001",
+        "key": "redirectedUrl"
       }
     ],
     "public": true
