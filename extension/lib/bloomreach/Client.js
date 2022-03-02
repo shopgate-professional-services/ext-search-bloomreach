@@ -8,8 +8,7 @@ class Client {
    * @param {string} endpoint
    */
   constructor ({ config, tracedRequest, log }, endpoint = 'core') {
-    // TODO: staging-
-    this.uri = `http://staging-${endpoint}.dxpapi.com/api/v1/${endpoint}/`
+    this.uri = `http://${config.useStaging ? 'staging-' : ''}${endpoint}.dxpapi.com/api/v1/${endpoint}/`
     this.auth_key = config.auth_key
     this.domain_key = config.domain_key
     this.account_id = config.account_id
@@ -50,9 +49,7 @@ class Client {
         domain_key: this.domain_key,
         ref_url: this.ref_url,
         url: this.url,
-        // TODO:
         request_id: crypto.randomBytes(12).toString('hex'),
-        // TODO: https://documentation.bloomreach.com/api-reference/search-and-merchandising/cookie.html
         _br_uid_2: 'n/a',
         fl: 'pid, ProductCode',
         rows: 10,
@@ -104,7 +101,6 @@ class Client {
   async searchProducts ({ searchPhrase, filters, offset = 0, limit = 10, sort }) {
     const params = {
       q: searchPhrase,
-      // TODO:
       fq: this.prepareFilters(filters),
       start: offset,
       rows: limit,
@@ -251,13 +247,12 @@ class Client {
    * @return {Object}
    */
   prepareSort (sort) {
-    // TODO: how to do "top rated" ?
     const mapping = {
       nameDesc: 'name desc',
       nameAsc: 'name asc',
       priceDesc: 'sale_price desc',
       priceAsc: 'sale_price asc',
-      rankAsc: 'review_rating desc' // TODO:
+      rankAsc: 'review_rating desc'
     }
 
     return mapping[sort]

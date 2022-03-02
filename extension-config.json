@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0",
   "id": "@shopgate-project/search-bloomreach",
   "components": [
     {
@@ -12,7 +12,7 @@
     "auth_key": {
       "type": "admin",
       "destination": "backend",
-      "default": "aw079licjpe5ojxz",
+      "default": "",
       "params": {
         "label": "Bloomreach API auth_key",
         "type": "text"
@@ -21,7 +21,7 @@
     "domain_key": {
       "type": "admin",
       "destination": "backend",
-      "default": "harborfreight_en_app",
+      "default": "",
       "params": {
         "label": "Bloomreach API domain_key",
         "type": "text"
@@ -30,7 +30,7 @@
     "account_id": {
       "type": "admin",
       "destination": "backend",
-      "default": "6209",
+      "default": "",
       "params": {
         "label": "Bloomreach account_id",
         "type": "text"
@@ -60,6 +60,15 @@
       "default": true,
       "params": {
         "label": "Flag if search suggestions should be used or not",
+        "type": "checkbox"
+      }
+    },
+    "useStaging": {
+      "type": "admin",
+      "destination": "backend",
+      "default": false,
+      "params": {
+        "label": "Flag if staging endpoint should be used",
         "type": "checkbox"
       }
     }
