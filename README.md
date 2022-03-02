@@ -8,9 +8,13 @@ It provides search suggestions, results and result filters from Bloomreach.
 It does not provide filters for regular product listings in the catalog.
 
 ## Configuration
-
-
-
+- `auth_key`: Bloomreach API auth_key
+- `domain_key`: Bloomreach API domain_key
+- `account_id`: Bloomreach account_id
+- `url`: The absolute URL of the page where the request is made.
+- `ref_url`: The URL of the HTTP referrer for the webpage where the request is made. You must pass this parameter, but you can send it empty.
+- `useSearchSuggestions`: Flag if search suggestions should be used or not
+- `useStaging`: Flag if staging endpoint should be used
 
 ## Changelog
 
