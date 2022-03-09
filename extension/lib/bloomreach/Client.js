@@ -106,7 +106,8 @@ class Client {
       rows: limit,
       sort: this.prepareSort(sort),
       request_type: 'search',
-      search_type: 'keyword'
+      search_type: 'keyword',
+      boost: 'coupon:true' // show coupons always on top
     }
 
     const { response, keywordRedirect = {} } = await this.request(params) || {}
