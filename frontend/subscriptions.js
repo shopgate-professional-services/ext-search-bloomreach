@@ -1,7 +1,7 @@
 import {
   historyReplace,
 } from '@shopgate/engage/core';
-import { RECEIVE_SEARCH_RESULTS, searchReceived$ } from '@shopgate/pwa-common-commerce/search';
+import { searchReceived$ } from '@shopgate/pwa-common-commerce/search';
 
 /**
  * Subscriptions
