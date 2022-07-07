@@ -222,8 +222,6 @@ class Client {
       }
     })
 
-    console.warn(filters)
-
     return { filters }
   }
 
