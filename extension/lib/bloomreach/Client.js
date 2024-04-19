@@ -144,7 +144,7 @@ class Client {
       return []
     }
 
-    const { facet_fields, facet_ranges } = facet_counts
+    const { facets } = facet_counts
 
     const facetWhitelist = [
       // 'category', need special treatment because data is different
@@ -162,11 +162,12 @@ class Client {
     const facetFieldsToUse = []
 
     // special treatment for category facet since it has different data
-    if (facet_fields[FACET_CATEGORY] && facet_fields[FACET_CATEGORY].length) {
+    const categoryFacet = facets.find(f => f.name === 'category')
+    if (categoryFacet && categoryFacet.value.length) {
       facetFieldsToUse.push({
         id: FACET_CATEGORY,
         name: labelsForFacets[FACET_CATEGORY] || FACET_CATEGORY,
-        facets: facet_fields[FACET_CATEGORY].map((field) => ({
+        facets: categoryFacet.value.map((field) => ({
           count: field.count,
           name: field.cat_name,
           id: field.cat_id
@@ -175,23 +176,25 @@ class Client {
     }
 
     // common filters with same structure
-    facetWhitelist.forEach((facet) => {
-      if (!facet_fields[facet] || !facet_fields[facet].length) {
+    facetWhitelist.forEach((facetName) => {
+      const field = facets.find(facet => facet.name === facetName)
+      if (!field || !field.value.length) {
         return
       }
 
       facetFieldsToUse.push({
-        name: labelsForFacets[facet] || facet,
-        facets: facet_fields[facet]
+        name: labelsForFacets[facetName] || facetName,
+        facets: field.value
       })
     })
 
-    if (facet_ranges[FACET_PRICE] && facet_ranges[FACET_PRICE].length) {
+    const salePriceFacet = facets.find(f => f.name === 'sale_price')
+    if (salePriceFacet && salePriceFacet.value.length) {
       facetFieldsToUse.push(
         {
           id: FACET_PRICE,
           name: labelsForFacets[FACET_PRICE] || FACET_PRICE,
-          facets: facet_ranges[FACET_PRICE].map((field) => {
+          facets: salePriceFacet.value.map((field) => {
             if (field.count <= 0) {
               return
             }
