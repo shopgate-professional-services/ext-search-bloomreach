@@ -250,8 +250,8 @@ class Client {
    */
   prepareSort (sort) {
     const mapping = {
-      nameDesc: 'name desc',
-      nameAsc: 'name asc',
+      nameDesc: 'title desc',
+      nameAsc: 'title asc',
       priceDesc: 'sale_price desc',
       priceAsc: 'sale_price asc',
       rankAsc: 'review_rating desc'
