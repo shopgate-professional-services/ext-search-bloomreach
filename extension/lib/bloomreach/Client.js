@@ -4,7 +4,7 @@ const crypto = require('crypto')
 
 class Client {
   /**
-   * @param {Object} config
+   * @param {{ config, tracedRequest, log }} options
    * @param {string} endpoint
    */
   constructor ({ config, tracedRequest, log }, endpoint = 'core') {
@@ -36,11 +36,33 @@ class Client {
   }
 
   /**
-   * @param {Object} params
+   * @param {{ [key: string]: number|string|string[] }} params
    *
-   * @return {String}
+   * @return {Promise<object>}
    */
   async request (params) {
+    const query = new URLSearchParams()
+    query.append('account_id', this.account_id)
+    query.append('auth_key', this.auth_key)
+    query.append('domain_key', this.domain_key)
+    query.append('ref_url', this.ref_url)
+    query.append('url', this.url)
+    query.append('request_id', crypto.randomBytes(12).toString('hex'))
+    query.append('_br_uid_2', 'n/a')
+    query.append('fl', 'pid, ProductCode')
+    query.append('rows', 10)
+    query.append('start', 0)
+    query.append('request_type', 'search')
+    query.append('search_type', 'keyword')
+
+    Object.entries(params).forEach(([key, value]) => {
+      // custom handling for Bloomreach API requiring query params with multiple values like this:
+      // ?multiParam=value1&multiParam=value2
+      if (Array.isArray(value)) return value.forEach(subValue => query.append(key, subValue))
+
+      query.append(key, value)
+    })
+
     const response = await promisify(this.tracedRequest('Bloomreach'))({
       uri: this.uri,
       qs: {
@@ -134,17 +156,18 @@ class Client {
   }
 
   /**
-   * @param {String} q
+   * @param {string} q
    *
    * @return {Object}
    */
   async getFilters (q) {
-    const { facet_counts } = await this.request({ q, rows: 0 }) || {}
-    if (!facet_counts) {
+    const params = { q, rows: 0, 'facet.field': ['category', 'sale_price'] }
+    const { facet_counts: facetCounts } = await this.request(params) || {}
+    if (!facetCounts) {
       return []
     }
 
-    const { facets } = facet_counts
+    const { facets } = facetCounts
 
     const facetWhitelist = [
       // 'category', need special treatment because data is different
@@ -162,7 +185,7 @@ class Client {
     const facetFieldsToUse = []
 
     // special treatment for category facet since it has different data
-    const categoryFacet = facets.find(f => f.name === 'category')
+    const categoryFacet = facets.find(facet => facet.name === 'category')
     if (categoryFacet && categoryFacet.value.length) {
       facetFieldsToUse.push({
         id: FACET_CATEGORY,
@@ -199,9 +222,11 @@ class Client {
               return
             }
 
+            const name = ((field.start || field.start === 0) && field.end) ? `${field.start}$ - ${field.end}$` : field.name
+
             return {
               count: field.count,
-              name: `${field.start}$ - ${field.end}$`
+              name
               // id: field.cat_id
             }
           }).filter(Boolean)
