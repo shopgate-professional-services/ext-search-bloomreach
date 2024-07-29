@@ -1,13 +1,13 @@
 'use strict'
-const { promisify } = require('util')
 const crypto = require('crypto')
+const request = require('request-promise-native')
 
 class Client {
   /**
-   * @param {{ config, tracedRequest, log }} options
+   * @param {{ config, log }} options
    * @param {string} endpoint
    */
-  constructor ({ config, tracedRequest, log }, endpoint = 'core') {
+  constructor ({ config, log }, endpoint = 'core') {
     this.uri = `http://${config.useStaging ? 'staging-' : ''}${endpoint}.dxpapi.com/api/v1/${endpoint}/`
     this.auth_key = config.auth_key
     this.domain_key = config.domain_key
@@ -15,7 +15,6 @@ class Client {
     this.url = config.url
     this.ref_url = config.ref_url
 
-    this.tracedRequest = tracedRequest
     this.log = log
   }
 
@@ -41,29 +40,7 @@ class Client {
    * @return {Promise<object>}
    */
   async request (params) {
-    const query = new URLSearchParams()
-    query.append('account_id', this.account_id)
-    query.append('auth_key', this.auth_key)
-    query.append('domain_key', this.domain_key)
-    query.append('ref_url', this.ref_url)
-    query.append('url', this.url)
-    query.append('request_id', crypto.randomBytes(12).toString('hex'))
-    query.append('_br_uid_2', 'n/a')
-    query.append('fl', 'pid, ProductCode')
-    query.append('rows', 10)
-    query.append('start', 0)
-    query.append('request_type', 'search')
-    query.append('search_type', 'keyword')
-
-    Object.entries(params).forEach(([key, value]) => {
-      // custom handling for Bloomreach API requiring query params with multiple values like this:
-      // ?multiParam=value1&multiParam=value2
-      if (Array.isArray(value)) return value.forEach(subValue => query.append(key, subValue))
-
-      query.append(key, value)
-    })
-
-    const response = await promisify(this.tracedRequest('Bloomreach'))({
+    const response = await request({
       uri: this.uri,
       qs: {
         account_id: this.account_id,
@@ -80,8 +57,9 @@ class Client {
         search_type: 'keyword',
         ...params
       },
-      useQuerystring: true,
-      json: true
+      useQuerystring: true, // serialize arrays as foo=bar&foo=baz instead of the default foo[0]=bar&foo[1]=baz
+      json: true,
+      resolveWithFullResponse: true
     })
 
     if (response.statusCode >= 400) {
@@ -190,11 +168,15 @@ class Client {
       facetFieldsToUse.push({
         id: FACET_CATEGORY,
         name: labelsForFacets[FACET_CATEGORY] || FACET_CATEGORY,
-        facets: categoryFacet.value.map((field) => ({
-          count: field.count,
-          name: field.cat_name,
-          id: field.cat_id
-        }))
+        facets: categoryFacet.value.map((field) => {
+          if (field.cat_name.includes('~')) return null
+
+          return {
+            count: field.count,
+            name: field.cat_name,
+            id: field.cat_id
+          }
+        }).filter(Boolean)
       })
     }
 
