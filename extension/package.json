@@ -1,6 +1,6 @@
 {
   "name": "@shopgate-project/search-bloomreach",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "",
   "license": "Apache-2.0",
   "scripts": {
@@ -15,5 +15,9 @@
     "eslint-plugin-standard": "^4.0.1",
     "lint-staged": "^10.1.2",
     "standard": "^14.3.3"
+  },
+  "dependencies": {
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9"
   }
 }

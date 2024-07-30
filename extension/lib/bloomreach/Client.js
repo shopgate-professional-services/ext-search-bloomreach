@@ -1,13 +1,13 @@
 'use strict'
-const { promisify } = require('util')
 const crypto = require('crypto')
+const request = require('request-promise-native')
 
 class Client {
   /**
-   * @param {Object} config
+   * @param {{ config, log }} options
    * @param {string} endpoint
    */
-  constructor ({ config, tracedRequest, log }, endpoint = 'core') {
+  constructor ({ config, log }, endpoint = 'core') {
     this.uri = `http://${config.useStaging ? 'staging-' : ''}${endpoint}.dxpapi.com/api/v1/${endpoint}/`
     this.auth_key = config.auth_key
     this.domain_key = config.domain_key
@@ -15,7 +15,6 @@ class Client {
     this.url = config.url
     this.ref_url = config.ref_url
 
-    this.tracedRequest = tracedRequest
     this.log = log
   }
 
@@ -36,12 +35,12 @@ class Client {
   }
 
   /**
-   * @param {Object} params
+   * @param {{ [key: string]: number|string|string[] }} params
    *
-   * @return {String}
+   * @return {Promise<object>}
    */
   async request (params) {
-    const response = await promisify(this.tracedRequest('Bloomreach'))({
+    const response = await request({
       uri: this.uri,
       qs: {
         account_id: this.account_id,
@@ -58,8 +57,9 @@ class Client {
         search_type: 'keyword',
         ...params
       },
-      useQuerystring: true,
-      json: true
+      useQuerystring: true, // serialize arrays as foo=bar&foo=baz instead of the default foo[0]=bar&foo[1]=baz
+      json: true,
+      resolveWithFullResponse: true
     })
 
     if (response.statusCode >= 400) {
@@ -134,17 +134,18 @@ class Client {
   }
 
   /**
-   * @param {String} q
+   * @param {string} q
    *
    * @return {Object}
    */
   async getFilters (q) {
-    const { facet_counts } = await this.request({ q, rows: 0 }) || {}
-    if (!facet_counts) {
+    const params = { q, rows: 0, 'facet.field': ['category', 'sale_price'] }
+    const { facet_counts: facetCounts } = await this.request(params) || {}
+    if (!facetCounts) {
       return []
     }
 
-    const { facets } = facet_counts
+    const { facets } = facetCounts
 
     const facetWhitelist = [
       // 'category', need special treatment because data is different
@@ -162,16 +163,20 @@ class Client {
     const facetFieldsToUse = []
 
     // special treatment for category facet since it has different data
-    const categoryFacet = facets.find(f => f.name === 'category')
+    const categoryFacet = facets.find(facet => facet.name === 'category')
     if (categoryFacet && categoryFacet.value.length) {
       facetFieldsToUse.push({
         id: FACET_CATEGORY,
         name: labelsForFacets[FACET_CATEGORY] || FACET_CATEGORY,
-        facets: categoryFacet.value.map((field) => ({
-          count: field.count,
-          name: field.cat_name,
-          id: field.cat_id
-        }))
+        facets: categoryFacet.value.map((field) => {
+          if (field.cat_name.includes('~')) return null
+
+          return {
+            count: field.count,
+            name: field.cat_name,
+            id: field.cat_id
+          }
+        }).filter(Boolean)
       })
     }
 
@@ -199,9 +204,11 @@ class Client {
               return
             }
 
+            const name = ((field.start || field.start === 0) && field.end) ? `${field.start}$ - ${field.end}$` : field.name
+
             return {
               count: field.count,
-              name: `${field.start}$ - ${field.end}$`
+              name
               // id: field.cat_id
             }
           }).filter(Boolean)
