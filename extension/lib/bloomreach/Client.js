@@ -118,7 +118,7 @@ class Client {
           response: response,
           request: { params }
         },
-        'Doofinder empty results in response'
+        'Bloomreach empty results in response'
       )
       return {
         productIds: [],
@@ -208,8 +208,8 @@ class Client {
 
             return {
               count: field.count,
-              name
-              // id: field.cat_id
+              name,
+              id: `[${field.start} TO ${field.end}]`
             }
           }).filter(Boolean)
         }
