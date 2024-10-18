@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.7] - 2024-10-18
+### Changed
+- improved display of sale_price filter
+  - $ sign is displayed in front of price
+  - prices are rounded up ($49.99 to $50)
+  - range boundaries with * are displayed as text ($400 And Up)
+
 ## [1.0.6] - 2024-07-29
 ### Changed
 - fix sale_price filter
