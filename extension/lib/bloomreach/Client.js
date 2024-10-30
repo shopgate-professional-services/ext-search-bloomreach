@@ -88,9 +88,11 @@ class Client {
     })
 
     return {
-      suggestions: response && response.suggestions ? response.suggestions.map(
-        result => result.q
-      ) : []
+      suggestions: response && response.suggestions
+        ? response.suggestions.map(
+          result => result.q
+        )
+        : []
     }
   }
 
@@ -115,7 +117,7 @@ class Client {
     if (!response || !Array.isArray(response.docs)) {
       this.log.error(
         {
-          response: response,
+          response,
           request: { params }
         },
         'Bloomreach empty results in response'
@@ -201,10 +203,18 @@ class Client {
           name: labelsForFacets[FACET_PRICE] || FACET_PRICE,
           facets: salePriceFacet.value.map((field) => {
             if (field.count <= 0) {
-              return
+              return undefined
             }
 
-            const name = ((field.start || field.start === 0) && field.end) ? `${field.start}$ - ${field.end}$` : field.name
+            let name = field.name
+
+            if (field.start === '*') {
+              name = `Below $${field.end}`
+            } else if (field.end === '*') {
+              name = `$${field.start} And Up`
+            } else if ((field.start || field.start === 0) && field.end) {
+              name = `$${field.start} - $${Math.ceil(field.end)}`
+            }
 
             return {
               count: field.count,
@@ -216,7 +226,7 @@ class Client {
       )
     }
 
-    const regEx = new RegExp('\\+', 'g')
+    const regEx = /\+/g
 
     const filters = facetFieldsToUse.map(({ id, name, facets }) => {
       return {
