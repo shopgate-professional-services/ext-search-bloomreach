@@ -14,6 +14,7 @@ class Client {
     this.account_id = config.account_id
     this.url = config.url
     this.ref_url = config.ref_url
+    this.includeHitsInFilterLabels = config.includeHitsInFilterLabels === true
 
     this.log = log
   }
@@ -234,11 +235,15 @@ class Client {
         label: name,
         source: 'Bloomreach',
         type: 'multiselect',
-        values: facets.map(element => ({
-          id: element.id || element.name,
-          label: `${decodeURIComponent(element.name.replace(regEx, ' '))} (${element.count})`,
-          hits: element.count
-        }))
+        values: facets.map((element) => {
+          const label = decodeURIComponent(element.name.replace(regEx, ' '))
+
+          return {
+            id: element.id || element.name,
+            label: this.includeHitsInFilterLabels ? `${label} (${element.count})` : label,
+            hits: element.count
+          }
+        })
       }
     })
 
