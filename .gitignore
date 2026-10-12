@@ -66,4 +66,4 @@ typings/
 npm-debug.log
 frontend/config.json
 extension/config.json
-**/package-lock.json
+extension/package-lock.json
