@@ -1,7 +1,5 @@
-import {
-  historyReplace,
-} from '@shopgate/engage/core';
-import { searchReceived$ } from '@shopgate/pwa-common-commerce/search';
+import { historyReplace } from '@shopgate/engage/core/actions';
+import { searchReceived$ } from '@shopgate/engage/search/streams';
 
 /**
  * Subscriptions
