@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.0] - 2026-10-12
+### Changed
+- labels of filter values no longer contain the number of hits (e.g. "Brand" instead of "Brand (12)"); the number is still available as `hits` of each filter value
+
+### Added
+- config `includeHitsInFilterLabels` to append the number of hits to the labels of filter values again
+
 ## [1.0.7] - 2024-10-18
 ### Changed
 - improved display of sale_price filter

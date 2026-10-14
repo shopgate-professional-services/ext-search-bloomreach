@@ -1,0 +1,4 @@
+{
+  "extends": "@shopgate/engage/tsconfig.extension.json",
+  "exclude": ["node_modules", "coverage"]
+}

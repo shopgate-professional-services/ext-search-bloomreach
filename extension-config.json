@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
+  "version": "1.1.0-beta.2",
   "id": "@shopgate-project/search-bloomreach",
   "components": [
     {
@@ -69,6 +69,15 @@
       "default": false,
       "params": {
         "label": "Flag if staging endpoint should be used",
+        "type": "checkbox"
+      }
+    },
+    "includeHitsInFilterLabels": {
+      "type": "admin",
+      "destination": "backend",
+      "default": false,
+      "params": {
+        "label": "Flag if the number of hits should be appended to the labels of filter values, e.g. \"Brand (12)\". The number is always available as separate \"hits\" value.",
         "type": "checkbox"
       }
     }

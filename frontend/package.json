@@ -1,0 +1,15 @@
+{
+  "name": "@shopgate-project/search-bloomreach",
+  "version": "1.1.0",
+  "description": "",
+  "license": "Apache-2.0",
+  "scripts": {
+    "lint": "eslint --ignore-path ../.gitignore --ext .js,.jsx ."
+  },
+  "devDependencies": {
+    "@shopgate/engage": "^7.33.1",
+    "@shopgate/eslint-config": "^7.33.1",
+    "@shopgate/pwa-unit-test": "^7.33.1",
+    "eslint": "^8.57.1"
+  }
+}

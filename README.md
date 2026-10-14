@@ -15,6 +15,7 @@ It does not provide filters for regular product listings in the catalog.
 - `ref_url`: The URL of the HTTP referrer for the webpage where the request is made. You must pass this parameter, but you can send it empty.
 - `useSearchSuggestions`: Flag if search suggestions should be used or not
 - `useStaging`: Flag if staging endpoint should be used
+- `includeHitsInFilterLabels`: Flag if the number of hits should be appended to the labels of filter values, e.g. "Brand (12)". Off by default, since the number is always available as separate `hits` value of each filter value. Turn it on for shops whose filter page only displays the label.
 
 ## Changelog
 

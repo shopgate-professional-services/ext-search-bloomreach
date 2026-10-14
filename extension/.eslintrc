@@ -1,17 +1,7 @@
 {
   "root": true,
   "extends": "standard",
-  "parserOptions": {
-    "ecmaVersion": 2018
-  },
-  "env":{
-    "node": true
-  },
   "rules": {
-    "no-console": "error",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ]
+    "no-console": "error"
   }
 }
